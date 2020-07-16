@@ -14,12 +14,12 @@ ATTENTION : la version de python doit être supérieur ou égale à 3.0
 pour lancer le programmes, il faut télécharger 2 modules complémentaires :   Pytz, qui va nous aider à gérer les fuseaux horaires, et ics qui va nous aider à transformer le calendrier dans le bon format.  
 * Pour se faire, sur Windows : 
 	- lancer le Powershell et entrer :
-		* >pip install pytz
-		* >pip install ics
+		* `pip install pytz`
+		* `pip install ics`
 * sur Linux / Macos : 
 	- ouvrir un terminal et entrer :
-		* >python3 -m pip install pytz
-		* >python3 -m pip install ics
+		* `python3 -m pip install pytz`
+		* `python3 -m pip install ics `
   
  
    
@@ -27,11 +27,10 @@ pour lancer le programmes, il faut télécharger 2 modules complémentaires :   
 Pour lancer le programme, il suffit : 
 * Dans le Powershell :   
 taper : 
-	* >cd adresseDuFichierICaler.py  
-	(pour trouver l’adresse, cliquer sur le fichier depuis l’explorateur de fichiers + propriétés)   
+	* `cd adresseDuFichierICaler.py` (pour trouver l’adresse, cliquer sur le fichier depuis l’explorateur de fichiers + propriétés)   
 puis taper :
-	* >py.exe icaler.py
+	* `py.exe icaler.py`
 * Dans l’explorateur de fichiers :
-	cliquer sur le fichier icaler.py ou sélectionner lancer avec python, via un clique droit
+	cliquer sur le fichier `icaler.py` ou sélectionner lancer avec python, via un clique droit
 
 

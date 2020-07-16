@@ -1,6 +1,6 @@
 # projetPiscine
 ## 1. Télécharger Python 
-ATTENTION : la version de python doit être supérieur ou égale à 3.0
+ATTENTION : la version de python doit être supérieur ou égale à 3.0  
  voir site internet : [Lien vers le site de téléchargement](https://www.python.org/downloads/windows/ "Python pour Windows")
   
     

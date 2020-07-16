@@ -50,6 +50,7 @@ def calGeter():
     files = [f for f in os.listdir('.') if f.endswith('.csv')]
     for file in files:
         with open(file) as csv_file:
+            print(f"\n \n  Processing file <{file}> \n \n ")
             csv_reader = csv.reader(csv_file, delimiter=separator)
 
             line_count = 0
@@ -57,7 +58,7 @@ def calGeter():
             noms= []
             rows = 0
              
-            #print("Generating the Days and the Names in the file...  \n \n")
+            #print("        Generating the Days and the Names in the file...  \n \n")
             for row in csv_reader:
 
                 rows += 1
@@ -78,7 +79,7 @@ def calGeter():
                     creneau = [None,None,None]
                     planning["creneau"]=[]
                     planning['nom']=nom
-                    print(f"Generating the planning for : {nom} ... \n \n")
+                    print(f"    Generating the planning for : <{nom}> ... \n ")
                     rowInt = 0
                     for row in csv_reader:
                         rowInt += 1
@@ -142,7 +143,7 @@ def calGeter():
 
                     printerToCalendar(planning,csv_file)
     toCalendarFormatter()
-    
+    print('<Made by Nathan>')
 
 
 #######################################################################################################################################################################################################
@@ -266,4 +267,10 @@ def toCalendarFormatter():
 
 if __name__ == '__main__':
     calGeter()
+
+
+#######################################################################################################################################################################################################
+#######################################################################################################################################################################################################
+#######################################################################################################################################################################################################
+#Contact : nb.nathan12@gmail.com
 

@@ -5,16 +5,15 @@
 
 	a. Téléchargement 
 		Vérifier que la case Add Python to PATH  (Ajouter Python au PATH) est coché (c’est pour la suite)
-      ![Alt][https://www.google.com/url?sa=i&url=https%3A%2F%2Fdatatofish.com%2Fadd-python-to-windows-path%2F&psig=AOvVaw3tGuRim6PSHsXwGEDqD9pL&ust=1595028082661000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNiSh-T00uoCFQAAAAAdAAAAABAE]
+      ![select add to path](https://www.google.com/url?sa=i&url=https%3A%2F%2Fdatatofish.com%2Fadd-python-to-windows-path%2F&psig=AOvVaw3tGuRim6PSHsXwGEDqD9pL&ust=1595028082661000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNiSh-T00uoCFQAAAAAdAAAAABAE)
 	￼
 
 	b. Téléchargement des modules :
 		pour lancer le programmes, il faut télécharger 2 modules complémentaires : Pytz, qui va nous aider à gérer les fuseaux horaires, et ics qui va nous aider à transformer le calendrier dans le bon format.
-		
 			Pour se faire, sur Windows : 
 				lancer le Powershell et entrer :
-					*‘pip install pytz’
-					*‘pip install ics’
+					* ‘pip install pytz’
+					* ‘pip install ics’
 2. Lancer le programme :
 	Pour lancer le programme, il suffit : 
 		Dans le Powershell : 

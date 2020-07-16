@@ -8,14 +8,39 @@ from pytz import timezone
 import os
 from shutil import rmtree
 
+#######################################################################################################################################################################################################
+
+############################################################         VARIABLES TO CHANGE FOR THE WELL BEING OF THE PROGRAM          #####################################################################
+
+#######################################################################################################################################################################################################
+
 #here i set up the timezone, i work with Paris, change that to where you work/live
 paris = timezone('Europe/Paris')
 
+#######################################################################################################################################################################################################
+
 #if you get undesired strings in table, at the end your parsing (weirdly named file etc...) add them their 
-undesiredBeginningStrings = ["ï»¿SEMAINE", "\ufeffSEMAINE", "SEMAINE"]
+undesiredBeginningStrings = ["ï»¿SEMAINE", "\ufeffSEMAINE", "SEMAINE", 'SEMAINE']
+
+#######################################################################################################################################################################################################
 
 #same but in the cells ( stuff you don't need like if the persons is on a break the whole day, you might not want to put it in the file, just saying)
 inCellsUndesiredStrings = [" REPOS "]
+
+#######################################################################################################################################################################################################
+
+separator = ';' #VERY IMPORTANT : ON SOME OS, CSV FILE GENERATED ISNT ',' BUT ';', here your chance to change it 
+
+#######################################################################################################################################################################################################
+
+
+
+
+#######################################################################################################################################################################################################
+
+##########################################################                      FUNCTIONS                                           ##################################################################
+
+#######################################################################################################################################################################################################
 
 def calGeter():
     if os.path.exists('fichiersSortie'):
@@ -25,7 +50,7 @@ def calGeter():
     files = [f for f in os.listdir('.') if f.endswith('.csv')]
     for file in files:
         with open(file) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
+            csv_reader = csv.reader(csv_file, delimiter=separator)
 
             line_count = 0
             jours =  []
@@ -43,16 +68,10 @@ def calGeter():
                 elif len(row[0]) > 2 and row[0] not in noms:
                     noms.append(row[0])
             csv_file.seek(0)
-
-            
             planning = {}
+ 
             
-
-
-
-
-            
-            if rows > 45:
+            if rows > 45: #if the structure is a column structure (ok this isn't great a way to proceed, but that has to work for my way of doing things anyway) 
                 line_decrem = 0
 
                 for nom in noms:
@@ -86,49 +105,7 @@ def calGeter():
                                         
                                     creneau = [None,None,None]
                             
-                    for creneau in planning["creneau"]:
-                        c = Calendar()
-                        e = Event()
-                        e.name = 'piscine'
-                        heureCreneau = list(creneau[0])
-                        for elem in heureCreneau:
-                            if elem == ':':
-                                heureCreneau = heureCreneau[:heureCreneau.index(elem)]
-                                pass
-                        heureCreneau = ''.join(str(elem) for elem in heureCreneau)
-                        heureCreneauend = list(creneau[1])
-                        for elem in heureCreneauend:
-                            if elem == ':':
-                                heureCreneauend = heureCreneauend[:heureCreneauend.index(elem)]
-                                pass
-                        heureCreneauend = ''.join(str(elem) for elem in heureCreneauend)
-                        minute = ''.join(str(elem) for elem in creneau[0][-2:])
-                        ##              print(f"heure : {heureCreneau}  et la minute : {minute}")
-                        date = creneau[2].split('-')
-                        # print(f" la date : {date}")
-
-                        e.begin = datetime.datetime(int(date[0]), int(date[1]), int(date[2]),
-                                                    int(heureCreneau), int(minute), 0, tzinfo=paris)
-                        # e.begin = creneauStr[0]
-                        # e.end = creneauStr[1]
-                        e.end = datetime.datetime(int(date[0]), int(date[1]), int(date[2]),
-                                                  int(heureCreneauend), int(minute), 0, tzinfo=paris)
-
-                        # e.begin = creneauStr[0]
-                        # e.end = creneauStr[1]
-                        c.events.add(e)
-                        c.events
-                        os.chdir(r'../')
-                        if not os.path.exists('tmp'):
-                            os.mkdir('tmp')
-                        os.chdir('tmp')
-                        planning['nom'] = nom
-                        with open(planning["nom"] + '.ics', 'a') as my_file:
-                            my_file.writelines(c)
-                        os.chdir('../fichiersAtraiter')
-                    planning['nom'] = None
-                    planning['creneau'] = []
-                    csv_file.seek(0)
+                    printerToCalendar(planning,csv_file)
             else :
                 line_decrem = 0
                 for nom in noms:
@@ -163,50 +140,67 @@ def calGeter():
 
                         
 
-                    for creneau in planning["creneau"]:
-                        #print(creneau)
-                        c = Calendar()
-                        e = Event()
-                        e.name = 'piscine ' + planning["nom"]
-                        heureCreneau = list(creneau[0])
-                        for elem in heureCreneau:
-                            if elem == ':':
-                                heureCreneau = heureCreneau [:heureCreneau.index(elem)]
-                                pass
-                        heureCreneau = ''.join(str(elem) for elem in heureCreneau)
-                        heureCreneauend = list(creneau[1])
-                        for elem in heureCreneauend:
-                            if elem == ':':
-                                heureCreneauend = heureCreneauend [:heureCreneauend.index(elem)]
-                                pass
-                        heureCreneauend = ''.join(str(elem) for elem in heureCreneauend)
-                        minute = ''.join(str(elem) for elem in creneau[0][-2:])
-            ##              print(f"heure : {heureCreneau}  et la minute : {minute}")
-                        date = creneau[2].split('-')
-                        #print(f" la date : {date}")
-
-
-                        e.begin = datetime.datetime(int(date[0]),int(date[1]),int(date[2]),int(heureCreneau),int(minute),0,tzinfo=paris)
-                        #e.begin = creneauStr[0]
-                        #e.end = creneauStr[1]
-                        e.end = datetime.datetime(int(date[0]),int(date[1]),int(date[2]),int(heureCreneauend),int(minute),0,tzinfo=paris)
-
-
-                        #e.begin = creneauStr[0]
-                        #e.end = creneauStr[1]
-                        c.events.add(e)
-                        c.events
-                        os.chdir(r'../')
-                        if not os.path.exists('tmp'):
-                            os.mkdir('tmp')
-                        os.chdir('tmp')
-                        with open(planning["nom"]+'.ics', 'a') as my_file:
-                            my_file.writelines(c)
-                        os.chdir('../fichiersAtraiter')
-                    planning['nom']= None
-                    planning['creneau']= []
-                    csv_file.seek(0)
+                    printerToCalendar(planning,csv_file)
     toCalendarFormatter()
+    
+
+
+#######################################################################################################################################################################################################
+
+
+
+    
+def printerToCalendar(planning,csv_file):
+    for creneau in planning["creneau"]:
+        c = Calendar()
+        e = Event()
+        e.name = 'piscine ' + planning['nom']
+        heureCreneau = list(creneau[0])
+        for elem in heureCreneau:
+            if elem == ':':
+                heureCreneau = heureCreneau[:heureCreneau.index(elem)]
+                pass
+        heureCreneau = ''.join(str(elem) for elem in heureCreneau)
+        heureCreneauend = list(creneau[1])
+        for elem in heureCreneauend:
+            if elem == ':':
+                heureCreneauend = heureCreneauend[:heureCreneauend.index(elem)]
+                pass
+        heureCreneauend = ''.join(str(elem) for elem in heureCreneauend)
+        minute = ''.join(str(elem) for elem in creneau[0][-2:])
+        minuteEnd = ''.join(str(elem) for elem in creneau[1][-2:])
+        #print(f"heure : {heureCreneau}  et la minute : {minute}, creneau : {creneau[1]}")
+        date = creneau[2].split(' ')
+        # print(f" la date : {date}")
+        datetime_object = datetime.datetime.strptime(date[2], "%B")
+        date[2] = datetime_object.month
+        
+
+        e.begin = datetime.datetime(int(date[3]), int(date[2]), int(date[1]),int(heureCreneau), int(minute), 0, tzinfo=paris)
+        # e.begin = creneauStr[0]
+        # e.end = creneauStr[1]
+        #print(date,heureCreneauend+':'+minute)
+        e.end = datetime.datetime(int(date[3]), int(date[2]), int(date[1]),
+                                  int(heureCreneauend), int(minuteEnd), 0, tzinfo=paris)
+
+        # e.begin = creneauStr[0]
+        # e.end = creneauStr[1]
+        c.events.add(e)
+        c.events
+        os.chdir(r'../')
+        if not os.path.exists('tmp'):
+            os.mkdir('tmp')
+        os.chdir('tmp')
+        #planning['nom'] = nom
+        with open(planning["nom"] + '.ics', 'a') as my_file:
+            my_file.writelines(c)
+        os.chdir('../fichiersAtraiter')
+    planning['nom'] = None
+    planning['creneau'] = []
+    csv_file.seek(0)
+
+#######################################################################################################################################################################################################
+
 
 def toCalendarFormatter():
     '''
@@ -264,9 +258,12 @@ def toCalendarFormatter():
     if os.path.exists('tmp/'):
         rmtree('tmp/')
     
-'''
-now I call the functions
-'''
+
+#######################################################################################################################################################################################################
+#######################################################################################################################################################################################################
+#######################################################################################################################################################################################################
+
+
 if __name__ == '__main__':
     calGeter()
 

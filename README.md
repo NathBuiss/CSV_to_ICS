@@ -16,11 +16,12 @@ pour lancer le programmes, il faut télécharger 2 modules complémentaires :   
 	- lancer le Powershell et entrer :
 		* `pip install pytz`
 		* `pip install ics`
+		* `pip install tzlocal`
 * sur Linux / Macos : 
 	- ouvrir un terminal et entrer :
 		* `python3 -m pip install pytz`
-		* `python3 -m pip install ics `
-  
+		* `python3 -m pip install ics`
+		* `python3 -m pip install tzlocal`
  
    
 ## 2. Lancer le programme :

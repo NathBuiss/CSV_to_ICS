@@ -7,6 +7,8 @@ import datetime
 from pytz import timezone
 import os
 from shutil import rmtree
+from dateutil.tz import tzlocal
+from tzlocal import get_localzone
 
 #######################################################################################################################################################################################################
 
@@ -15,24 +17,20 @@ from shutil import rmtree
 #######################################################################################################################################################################################################
 
 #here i set up the timezone, i work with Paris, change that to where you work/live
-paris = timezone('Europe/Paris')
+
+dateutil_tz = tzlocal()
+paris = get_localzone()
+#paris = timezone('Europe/Paris')
 
 #######################################################################################################################################################################################################
 
 #if you get undesired strings in table, at the end your parsing (weirdly named file etc...) add them their 
-undesiredBeginningStrings = ["ï»¿SEMAINE", "\ufeffSEMAINE", "SEMAINE", 'SEMAINE']
+undesiredBeginningStrings = ["ï»¿SEMAINE", "\ufeffSEMAINE", "SEMAINE", 'SEMAINE', 'ACCUEIL']
 
 #######################################################################################################################################################################################################
 
 #same but in the cells ( stuff you don't need like if the persons is on a break the whole day, you might not want to put it in the file, just saying)
 inCellsUndesiredStrings = [" REPOS "]
-
-#######################################################################################################################################################################################################
-
-separator = ';' #VERY IMPORTANT : ON SOME OS, CSV FILE GENERATED ISNT ',' BUT ';', here your chance to change it 
-
-#######################################################################################################################################################################################################
-
 
 
 
@@ -49,9 +47,19 @@ def calGeter():
     
     files = [f for f in os.listdir('.') if f.endswith('.csv')]
     for file in files:
+##        with open(filename, 'rb') as csvfile:
+##        dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=';,')
+##        csvfile.seek(0)
+##        reader = csv.reader(csvfile, dialect)
+
         with open(file) as csv_file:
+            ##### Open the csv file and checks the delimiter (wether its comma or semicolon)
+            dialect = csv.Sniffer().sniff(csv_file.read(), delimiters=';,')
+            csv_file.seek(0)
+            csv_reader = csv.reader(csv_file, dialect)
+            
             print(f"\n \n  Processing file <{file}> \n \n ")
-            csv_reader = csv.reader(csv_file, delimiter=separator)
+            #csv_reader = csv.reader(csv_file, delimiter=separator)
 
             line_count = 0
             jours =  []

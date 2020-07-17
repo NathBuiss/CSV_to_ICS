@@ -34,7 +34,7 @@ puis taper :
 * Dans l’explorateur de fichiers :
 	cliquer sur le fichier `icaler.py` ou sélectionner lancer avec python, via un clique droit
 	
-## Utilisation du programme : 
+## 3. Utilisation du programme : 
 Pour utiliser le programme : 
 * lancer une fois le programme tel quel :
 	* Celui-ci va créer le dossier dans lequel vous devez déposer les fichiers que vous voulez transformer.

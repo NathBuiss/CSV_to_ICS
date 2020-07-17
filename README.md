@@ -33,5 +33,13 @@ puis taper :
 	* `py.exe icaler.py`
 * Dans l’explorateur de fichiers :
 	cliquer sur le fichier `icaler.py` ou sélectionner lancer avec python, via un clique droit
+	
+## 3. Utilisation du programme : 
+Pour utiliser le programme : 
+* lancer une fois le programme tel quel :
+	* Celui-ci va créer le dossier dans lequel vous devez déposer les fichiers que vous voulez transformer.
+* un fois le programme lancé, placez vos fichiers à transformer, vous pouvez en mettre autant que vous voulez. Veuillez à suivre le format disponible dans le dossier Template, les fichiers doivent tout de même ètre mis au format CSV pour fonctionner.  
+> Si vous mettez plusieurs fichiers comportant les mêmes personnes, pas de soucis, le fichier final de cette personne contiendra tous les créneaux de cette personne 
+* récuperez les fichiers dans le dossier de sortie, puis envoyez les aux personnes concernées. celles-ci n'auront qu'à cliquer dessus pour les ajouter à leur calendrier.
 
 

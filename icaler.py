@@ -25,14 +25,16 @@ paris = get_localzone()
 #######################################################################################################################################################################################################
 
 #if you get undesired strings in table, at the end your parsing (weirdly named file etc...) add them their 
-undesiredBeginningStrings = ["ï»¿SEMAINE", "\ufeffSEMAINE", "SEMAINE", 'SEMAINE', 'ACCUEIL']
+undesiredBeginningStrings = ["ï»¿SEMAINE", "\ufeffSEMAINE", "SEMAINE", 'ACCUEIL',"ï»¿WEEK", "\ufeffWEEK", "WEEK"]
 
 #######################################################################################################################################################################################################
 
 #same but in the cells ( stuff you don't need like if the persons is on a break the whole day, you might not want to put it in the file, just saying)
 inCellsUndesiredStrings = [" REPOS "]
 
+entryFiles = 'fichiersAtraiter'
 
+outFiles = 'fichiersSortie'
 
 #######################################################################################################################################################################################################
 
@@ -41,116 +43,119 @@ inCellsUndesiredStrings = [" REPOS "]
 #######################################################################################################################################################################################################
 
 def calGeter():
-    if os.path.exists('fichiersSortie'):
-        rmtree('fichiersSortie')
-    os.chdir(r'fichiersAtraiter')
+    if os.path.exists(outFiles):
+        rmtree(outFiles)
+    os.chdir(entryFiles)
     
     files = [f for f in os.listdir('.') if f.endswith('.csv')]
-    for file in files:
-##        with open(filename, 'rb') as csvfile:
-##        dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=';,')
-##        csvfile.seek(0)
-##        reader = csv.reader(csvfile, dialect)
+    if files : 
+        for file in files:
+    ##        with open(filename, 'rb') as csvfile:
+    ##        dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=';,')
+    ##        csvfile.seek(0)
+    ##        reader = csv.reader(csvfile, dialect)
 
-        with open(file) as csv_file:
-            ##### Open the csv file and checks the delimiter (wether its comma or semicolon)
-            dialect = csv.Sniffer().sniff(csv_file.read(), delimiters=';,')
-            csv_file.seek(0)
-            csv_reader = csv.reader(csv_file, dialect)
-            
-            print(f"\n \n  Processing file <{file}> \n \n ")
-            #csv_reader = csv.reader(csv_file, delimiter=separator)
+            with open(file) as csv_file:
+                ##### Open the csv file and checks the delimiter (wether its comma or semicolon)
+                dialect = csv.Sniffer().sniff(csv_file.read(), delimiters=';,')
+                csv_file.seek(0)
+                csv_reader = csv.reader(csv_file, dialect)
+                
+                print(f"\n \n  Processing file <{file}> \n \n ")
+                #csv_reader = csv.reader(csv_file, delimiter=separator)
 
-            line_count = 0
-            jours =  []
-            noms= []
-            rows = 0
-             
-            #print("        Generating the Days and the Names in the file...  \n \n")
-            for row in csv_reader:
+                line_count = 0
+                jours =  []
+                noms= []
+                rows = 0
+                 
+                #print("        Generating the Days and the Names in the file...  \n \n")
+                for row in csv_reader:
 
-                rows += 1
-                if row[0] in undesiredBeginningStrings :
-                    for jour in row:
-                        if len(jour) > 2 and jour != 'ï»¿' and jour !='SEMAINE'and jour != 'ï»¿SEMAINE' and jour !='\ufeffSEMAINE' and jour !='\ufeff' :
-                            jours.append(jour)
-                elif len(row[0]) > 2 and row[0] not in noms:
-                    noms.append(row[0])
-            csv_file.seek(0)
-            planning = {}
- 
-            
-            if rows > 45: #if the structure is a column structure (ok this isn't great a way to proceed, but that has to work for my way of doing things anyway) 
-                line_decrem = 0
+                    rows += 1
+                    if row[0] in undesiredBeginningStrings :
+                        for jour in row:
+                            if len(jour) > 2 and jour != 'ï»¿' and jour !='SEMAINE'and jour != 'ï»¿SEMAINE' and jour !='\ufeffSEMAINE' and jour !='\ufeff' :
+                                jours.append(jour)
+                    elif len(row[0]) > 2 and row[0] not in noms:
+                        noms.append(row[0])
+                csv_file.seek(0)
+                planning = {}
+     
+                
+                if rows > 45: #if the structure is a column structure (ok this isn't great a way to proceed, but that has to work for my way of doing things anyway) 
+                    line_decrem = 0
 
-                for nom in noms:
-                    creneau = [None,None,None]
-                    planning["creneau"]=[]
-                    planning['nom']=nom
-                    print(f"    Generating the planning for : <{nom}> ... \n ")
-                    rowInt = 0
-                    for row in csv_reader:
-                        rowInt += 1
-                        if row[0] == nom or line_decrem > 0:
-                           
-                            #print(f" la row[0] : {row[0]}")
-                            if line_decrem > 0:
-                                line_decrem -= 1
-                            else:
-                                line_decrem += 1 
-                            for case in range(len(row)):
-                                if case%3==1:
-                                    creneau[0]=row[case]
-                                    alt = case//3
-                                    if alt<7:
-                                        #print(alt*(1+(rowInt//19)))
-                                        creneau[2]=jours[alt+(7*(rowInt//19))]
-                                elif case%3==2:
-                                    creneau[1]= row[case]
+                    for nom in noms:
+                        creneau = [None,None,None]
+                        planning["creneau"]=[]
+                        planning['nom']=nom
+                        print(f"    Generating the planning for : <{nom}> ... \n ")
+                        rowInt = 0
+                        for row in csv_reader:
+                            rowInt += 1
+                            if row[0] == nom or line_decrem > 0:
+                               
+                                #print(f" la row[0] : {row[0]}")
+                                if line_decrem > 0:
+                                    line_decrem -= 1
+                                else:
+                                    line_decrem += 1 
+                                for case in range(len(row)):
+                                    if case%3==1:
+                                        creneau[0]=row[case]
+                                        alt = case//3
+                                        if alt<7:
+                                            #print(alt*(1+(rowInt//19)))
+                                            creneau[2]=jours[alt+(7*(rowInt//19))]
+                                    elif case%3==2:
+                                        creneau[1]= row[case]
+                                    
+                                        if creneau[0] not in inCellsUndesiredStrings and len(creneau[0])>0 and len(creneau[1])>0:
+                                            
+                                            planning['creneau'].append((creneau[0],creneau[1],creneau[2]))
+                                            
+                                        creneau = [None,None,None]
                                 
-                                    if creneau[0] not in inCellsUndesiredStrings and len(creneau[0])>0 and len(creneau[1])>0:
-                                        
-                                        planning['creneau'].append((creneau[0],creneau[1],creneau[2]))
-                                        
-                                    creneau = [None,None,None]
+                        printerToCalendar(planning,csv_file)
+                else :
+                    line_decrem = 0
+                    for nom in noms:
+                        creneau = [None,None,None]
+                        planning["creneau"]=[]
+                        planning['nom']=nom
+                        print(f"Generating the planning for : {nom} ... \n \n")
+                        for row in csv_reader:
+                            if row[0] == nom or line_decrem > 0:
+                                #print(f" la row[0] : {row[0]}")
+                                if line_decrem > 0:
+                                    line_decrem -= 1
+                                else:
+                                    line_decrem += 1
+                                for case in range(len(row)):
+                                    #print(f"la case : {row[case]}")
+                                    #print(f" la case : {case}, la case%3 :  {case%3}")
+
+                                    if case%3==1:
+            ##                            print(f"case%3==1")
+                                        creneau[0]=row[case]
+                                        alt = case//3
+                                        if alt<63:
+                                            creneau[2]=jours[alt]
+                                    elif case%3==2:
+                                        creneau[1]= row[case]
+                                        if creneau[0] != " REPOS " and len(creneau[0])>0 and len(creneau[1])>0:
+
+                                            planning['creneau'].append((creneau[0],creneau[1],creneau[2]))
+
+                                        creneau = [None,None,None]
+
                             
-                    printerToCalendar(planning,csv_file)
-            else :
-                line_decrem = 0
-                for nom in noms:
-                    creneau = [None,None,None]
-                    planning["creneau"]=[]
-                    planning['nom']=nom
-                    print(f"Generating the planning for : {nom} ... \n \n")
-                    for row in csv_reader:
-                        if row[0] == nom or line_decrem > 0:
-                            #print(f" la row[0] : {row[0]}")
-                            if line_decrem > 0:
-                                line_decrem -= 1
-                            else:
-                                line_decrem += 1
-                            for case in range(len(row)):
-                                #print(f"la case : {row[case]}")
-                                #print(f" la case : {case}, la case%3 :  {case%3}")
 
-                                if case%3==1:
-        ##                            print(f"case%3==1")
-                                    creneau[0]=row[case]
-                                    alt = case//3
-                                    if alt<63:
-                                        creneau[2]=jours[alt]
-                                elif case%3==2:
-                                    creneau[1]= row[case]
-                                    if creneau[0] != " REPOS " and len(creneau[0])>0 and len(creneau[1])>0:
-
-                                        planning['creneau'].append((creneau[0],creneau[1],creneau[2]))
-
-                                    creneau = [None,None,None]
-
-                        
-
-                    printerToCalendar(planning,csv_file)
-    toCalendarFormatter()
+                        printerToCalendar(planning,csv_file)
+        toCalendarFormatter()
+    else :
+        print(f"no csv file found in <{entryFiles}> \nMake sure to put one inside ! \nBesides, make sure it goes by one of the templates found in the template folders. \n")
     print('<Made by Nathan>')
 
 
@@ -234,9 +239,9 @@ def toCalendarFormatter():
         delete_list = ["BEGIN:VCALENDAR","END:VCALENDAR", "VERSION:2.0", "PRODID:ics.py - http://git.io/lLljaA"]
         fin = open(infile)
         os.chdir(r'../')
-        if not os.path.exists('fichiersSortie'):
-            os.mkdir('fichiersSortie')
-        os.chdir('fichiersSortie')
+        if not os.path.exists(outFiles):
+            os.mkdir(outFiles)
+        os.chdir(outFiles)
         fout = open(outfile, "w+")
         
         for line in fin:
@@ -274,7 +279,11 @@ def toCalendarFormatter():
 
 
 if __name__ == '__main__':
-    calGeter()
+    if os.path.exists(entryFiles):
+        calGeter()
+    else:
+        os.mkdir(entryFiles)
+        print(f" {entryFiles} Created. \nYou can put the files you want to process inside. \nMake sure they respect the format shown in the Template Folder. \n")
 
 
 #######################################################################################################################################################################################################

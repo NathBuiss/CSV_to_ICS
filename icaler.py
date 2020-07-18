@@ -16,10 +16,15 @@ from tzlocal import get_localzone
 
 #######################################################################################################################################################################################################
 
-#here i set up the timezone, i work with Paris, change that to where you work/live
+#here i set up the timezone,I made it automatic,
+#But you can change it if it somehow doesnt work
+#comment the first two lines for you and then uncomment the last line,
+#i work in the Paris' timezone so i put htethis pne, just chang eit,
+#check "pytz timezone + your timezone" to put the correcttimezone.
 
 dateutil_tz = tzlocal()
 paris = get_localzone()
+
 #paris = timezone('Europe/Paris')
 
 #######################################################################################################################################################################################################

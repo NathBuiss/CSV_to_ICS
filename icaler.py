@@ -129,7 +129,7 @@ def calGeter():
                         creneau = [None,None,None]
                         planning["creneau"]=[]
                         planning['nom']=nom
-                        print(f"Generating the planning for : {nom} ... \n \n")
+                        print(f"    Generating the planning for : <{nom}> ... \n ")
                         for row in csv_reader:
                             if row[0] == nom or line_decrem > 0:
                                 #print(f" la row[0] : {row[0]}")
